@@ -25,6 +25,50 @@ export default function SceneLevel2() {
   const [stellaFear, setStellaFear] = useState(level2Config.initialEmotion.fear);
   const [stellaTrust, setStellaTrust] = useState(level2Config.initialEmotion.trust);
 
+  // Parse AI action string into a sequence of directional steps
+  const parseActions = (action: string): Position[] => {
+    const current = useGameStore.getState().levelState as Level2State;
+    const pos = current.stellaGridPos;
+    const steps: Position[] = [];
+
+    // Handle multi-step actions like "move_right,move_right,move_down"
+    const parts = action.split(",").map((s: string) => s.trim());
+
+    let cur = { ...pos };
+    for (const part of parts) {
+      const next = { ...cur };
+      switch (part) {
+        case "move_right": case "step_on": next.x += 1; break;
+        case "move_left": next.x -= 1; break;
+        case "move_up": next.y -= 1; break;
+        case "move_down": next.y += 1; break;
+        default: continue;
+      }
+      // Clamp to grid bounds
+      next.x = Math.max(0, Math.min(level2Config.roomLayout.gridCols - 1, next.x));
+      next.y = Math.max(0, Math.min(level2Config.roomLayout.gridRows - 1, next.y));
+      steps.push(next);
+      cur = next;
+    }
+
+    // If no steps parsed from action names, try to infer from action text
+    if (steps.length === 0) {
+      // Default: step right once
+      steps.push({ x: Math.min(pos.x + 1, level2Config.roomLayout.gridCols - 1), y: pos.y });
+    }
+
+    return steps;
+  };
+
+  // Execute steps sequentially with animation delays
+  const executeSteps = (steps: Position[]) => {
+    steps.forEach((targetPos, index) => {
+      setTimeout(() => {
+        attemptStep(targetPos.x, targetPos.y);
+      }, index * 800); // 800ms delay between each step for visible animation
+    });
+  };
+
   const handleSendMessage = useCallback(async (message: string) => {
     addMessage({ role: "player", content: message, timestamp: Date.now() });
 
@@ -44,12 +88,16 @@ export default function SceneLevel2() {
       updateEmotion(data.emotion?.fear, data.emotion?.trust);
       if (data.emotion?.trust > 0) updateAffinity(3);
 
-      if (data.action === "step_on") {
-        attemptStep(ls.stellaGridPos.x + 1, ls.stellaGridPos.y);
-      }
-      if (data.action === "run_through") {
-        updateAffinity(-20);
-        completeLevel();
+      // Handle AI actions — support direction moves and step sequences
+      if (data.action) {
+        if (data.action === "run_through") {
+          updateAffinity(-20);
+          completeLevel();
+        } else {
+          // Parse action into step sequence
+          const steps = parseActions(data.action);
+          executeSteps(steps);
+        }
       }
     } catch {
       addMessage({ role: "stella", content: "...信号...干扰...", timestamp: Date.now() });

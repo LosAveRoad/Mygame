@@ -50,8 +50,11 @@ function buildLevelContext(state: GameState): string {
 当前关卡：第二关 - 海森堡矩阵桥 (Hessenberg Bridge)
 环境：你面前是一片发光的玻璃地砖，每块地砖颜色略有不同。踩上去有的会亮，有的会触发红色激光。
 你的网格位置：(${ls.stellaGridPos.x}, ${ls.stellaGridPos.y})
+网格大小：${ls.gridSize}×${ls.gridSize}
 你已走过的格子：${JSON.stringify(ls.steppedTiles)}
 你能看到的：前方一片闪烁的方格，看起来很美但也很危险。
+重要：当你要移动时，action 必须用逗号分隔的多步格式，例如向右两格再向下一格就写 "move_right,move_right,move_down"。每一步只会移动一格。
+如果玩家让你冲过去不顾一切，用 "run_through"。
 玩家好感度：${state.affinity}/100
 当前信任：${state.trust}/100`;
   }
