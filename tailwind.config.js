@@ -188,6 +188,21 @@ module.exports = {
         "light-4": "#5C5C7B",
         "gray-1": "#697C89",
         glassmorphism: "rgba(16, 16, 18, 0.60)",
+        // Game-specific colors
+        "game-bg": "#050810",
+        "game-surface": "#0a0e17",
+        "game-border": "#1a2a3a",
+        "terminal": "#4a9eff",
+        "terminal-dim": "#2d5a8a",
+        "terminal-dark": "#1a3050",
+        "stella": "#c4a0ff",
+        "stella-dim": "#8060b0",
+        "stella-dark": "#2a1a3a",
+        "danger": "#ff4444",
+        "safe": "#44ff44",
+        "warning": "#FFB620",
+        "hud-text": "#6a8aaa",
+        "hud-dim": "#4a5a6a",
       },
       boxShadow: {
         "count-badge": "0px 0px 6px 2px rgba(219, 188, 159, 0.30)",
@@ -195,6 +210,9 @@ module.exports = {
       },
       screens: {
         xs: "400px",
+      },
+      fontFamily: {
+        mono: ["monospace"],
       },
       keyframes: {
         "accordion-down": {
@@ -205,10 +223,20 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "pulse-glow": {
+          "0%, 100%": { opacity: 1 },
+          "50%": { opacity: 0.5 },
+        },
+        "laser-blink": {
+          "0%, 100%": { opacity: 0.3 },
+          "50%": { opacity: 1 },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "laser-blink": "laser-blink 0.5s ease-in-out infinite",
       },
     },
   },
