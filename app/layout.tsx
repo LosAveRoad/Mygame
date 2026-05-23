@@ -1,14 +1,13 @@
 import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
-import "../globals.css";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Blind Room: Mind Link",
-  description: "A puzzle adventure game",
+  description: "AI-driven asymmetric puzzle escape room",
 };
 
 export default function RootLayout({
@@ -17,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="zh">
       <body className={inter.className}>{children}</body>
     </html>
   );
